@@ -1,0 +1,19 @@
+# Ignore everything
+*
+
+# Allow only source files
+!.gitignore
+!*.v
+!*.xdc
+!*.mem
+
+# Allow directories
+!*/
+
+# Ignore Vivado folders
+.Xil/
+*.cache/
+*.hw/
+*.sim/
+*.ip_user_files/
+*.runs/
