@@ -17,8 +17,8 @@ module DisplayTop(Clk, Rst, out7, en_out);
     output [7:0] en_out;
     
     wire ClkOut;
-    wire [31:0] v0;     // row
-    wire [31:0] v1;     // col
+    wire [31:0] bestRow;     // row
+    wire [31:0] bestCol;     // col
     
     ClkDiv u0(
         .Clk(Clk),
@@ -31,14 +31,14 @@ module DisplayTop(Clk, Rst, out7, en_out);
         .Rst(Rst),
         .PC_Out(PC_Out),
         .RegWriteData(RegWriteData),
-        .v0(v0),
-        .v1(v1)
+        .bestRow(bestRow),
+        .bestCol(bestCol)
     );
     
     Two4DigitDisplay u2(
         .Clk(Clk),
-        .NumberA(v1[15:0]),
-        .NumberB(v0[15:0]),
+        .NumberA(bestCol[15:0]),
+        .NumberB(bestRow[15:0]),
         .out7(out7),
         .en_out(en_out)
     );

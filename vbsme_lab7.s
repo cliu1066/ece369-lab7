@@ -1,6 +1,6 @@
 #  Fall 2025
-#  Team Members:    
-#  % Effort    :   
+#  Team Members: Candice Liu, Andrew Ghartey, Barack Marwanga Asande   
+#  % Effort    : 33%, 33%, 33%
 #
 # ECE369A,  
 # 
