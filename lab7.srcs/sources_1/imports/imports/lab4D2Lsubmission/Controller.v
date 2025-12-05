@@ -59,7 +59,7 @@ module Controller(OpCode, Funct, RegDst, Jump, JumpRegister, Link, Branch, MemRe
                 endcase
             end
             
-            6'b011100 : begin
+            6'b011100 : begin   // mul
                 case (Funct)
                     6'b000010: begin
                         RegDst = 1'b1;

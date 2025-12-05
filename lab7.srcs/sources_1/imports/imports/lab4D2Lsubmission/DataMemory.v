@@ -51,7 +51,7 @@ module DataMemory(Address, WriteData, Clk, MemWrite, MemRead, ReadData, MemSize)
 
     // Read data
     // Word index (use bits [11:2] for byte addressing)
-    wire [9:0] word_index = Address[13:2];
+    wire [11:0] word_index = Address[13:2];
     
     initial begin
         $readmemh("data_memory.mem", memory);

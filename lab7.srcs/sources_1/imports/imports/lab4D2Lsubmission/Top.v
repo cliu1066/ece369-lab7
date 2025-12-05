@@ -11,10 +11,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-module Top(Clk, Rst, PC_Out, RegWriteData);
+module Top(Clk, Rst, PC_Out, RegWriteData, v0, v1);
     input Clk, Rst;
     output wire [31:0] PC_Out;
     output wire [31:0] RegWriteData;
+    output wire [31:0] v0, v1;
     
     wire [31:0] PC_In, PC_AddResult;
     wire [31:0] Instruction;
@@ -56,7 +57,9 @@ module Top(Clk, Rst, PC_Out, RegWriteData);
         .RegWrite(MEM_WB_RegWrite),
         .Clk(Clk),
         .ReadData1(ReadData1),
-        .ReadData2(ReadData2)
+        .ReadData2(ReadData2),
+        .v0(v0),
+        .v1(v1)
     );
     
     // Sign Extend
