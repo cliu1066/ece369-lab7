@@ -14,15 +14,15 @@
 module Top_tb();
     reg Clk, Rst;
     wire [31:0] PC_Out, RegWriteData;
-    wire [31:0] v0, v1;
+    wire [31:0] bestRow, bestCol;
 
     Top u0(
         .Clk(Clk), 
         .Rst(Rst), 
         .PC_Out(PC_Out), 
         .RegWriteData(RegWriteData),
-        .v0(v0),
-        .v1(v1)
+        .bestRow(bestRow),
+        .bestCol(bestCol)
     );
     
     initial begin

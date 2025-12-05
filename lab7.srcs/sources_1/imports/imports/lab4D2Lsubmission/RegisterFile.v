@@ -47,14 +47,14 @@
 // to allow for data multiplexing and setup time.
 ////////////////////////////////////////////////////////////////////////////////
 
-module RegisterFile(ReadRegister1, ReadRegister2, WriteRegister, WriteData, RegWrite, Clk, ReadData1, ReadData2, v0, v1);
+module RegisterFile(ReadRegister1, ReadRegister2, WriteRegister, WriteData, RegWrite, Clk, ReadData1, ReadData2, bestRow, bestCol);
 
 	input [4:0] ReadRegister1, ReadRegister2, WriteRegister;
 	input [31:0] WriteData;
 	input Clk, RegWrite;
 	
 	output [31:0] ReadData1, ReadData2;
-	output [31:0] v0, v1;
+	output [31:0] bestRow, bestCol;
 	
 	reg [31:0] Register [0:31];
 	reg [31:0] ReadData1_Reg, ReadData2_Reg;
@@ -82,7 +82,7 @@ module RegisterFile(ReadRegister1, ReadRegister2, WriteRegister, WriteData, RegW
                        (RegWrite && WriteRegister == ReadRegister2) ? WriteData :
                        Register[ReadRegister2];
 
-    assign v0 = Register[2];
-    assign v1 = Register[3];
+    assign bestRow = Register[22];
+    assign bestCol = Register[23];
 
 endmodule

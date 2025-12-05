@@ -11,11 +11,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-module Top(Clk, Rst, PC_Out, RegWriteData, v0, v1);
+module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
     input Clk, Rst;
     output wire [31:0] PC_Out;
     output wire [31:0] RegWriteData;
-    output wire [31:0] v0, v1;
+    output wire [31:0] bestRow, bestCol;
     
     wire [31:0] PC_In, PC_AddResult;
     wire [31:0] Instruction;
@@ -58,8 +58,8 @@ module Top(Clk, Rst, PC_Out, RegWriteData, v0, v1);
         .Clk(Clk),
         .ReadData1(ReadData1),
         .ReadData2(ReadData2),
-        .v0(v0),
-        .v1(v1)
+        .bestRow(bestRow),
+        .bestCol(bestCol)
     );
     
     // Sign Extend
@@ -219,12 +219,13 @@ module Top(Clk, Rst, PC_Out, RegWriteData, v0, v1);
     wire BLTZ = (IF_ID_OpCode == 6'b000001) && (IF_ID_Rt == 5'b00000) && ($signed(BranchA_ID) < $signed(32'b0));
     
     wire BranchTaken_ID = BEQ || BNE || BGTZ || BLEZ || BGEZ || BLTZ;
+
+    wire ControlFlowChange_Branch = Branch && BranchTaken_ID;
+    wire ControlFlowChange_Jump = Jump || JumpRegister;        
+    wire ControlFlowChange_ID = ControlFlowChange_Branch || ControlFlowChange_Jump;
     
-    wire ControlFlowChange_ID;
-    assign ControlFlowChange_ID = (Branch && BranchTaken_ID) || Jump || JumpRegister;
-    
-    assign IF_ID_Flush = IF_ID_FlushHazard || ControlFlowChange_ID;
-    assign ID_EX_FlushControl = ID_EX_Flush || ControlFlowChange_ID;
+    assign IF_ID_Flush = IF_ID_FlushHazard || ControlFlowChange_ID;  
+    assign ID_EX_FlushControl = ID_EX_Flush || ControlFlowChange_Branch;
     
     Mux32Bit2To1 m13(EX_ALUSrc_Out, ForwardedB_EX, ID_EX_Imm_SE, ID_EX_ALUSrc);
     
