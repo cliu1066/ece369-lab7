@@ -17,7 +17,8 @@ module Top_tb();
     wire [31:0] bestRow, bestCol;
     
     // cycle count
-    integer cycleCount;
+    reg [31:0] cycle_count;
+    reg [31:0] inst_count;
 
     Top u0(
         .Clk(Clk), 
@@ -35,18 +36,31 @@ module Top_tb();
     
     initial begin
         Rst <= 1'b1;
-        cycleCount = 0;
+        cycle_count = 0;
+        inst_count = 0;
         #20;
         Rst <= 1'b0;
     end
     
     always @(posedge Clk) begin
         if (!Rst) begin
-            cycleCount = cycleCount + 1;
+            cycle_count = cycle_count + 1;
+            
+            if (u0.MEM_WB_RegWrite || u0.MEM_WB_MemToReg) begin
+                inst_count = inst_count + 1;
+            end
+            
+            if (cycle_count % 10000 == 0) begin
+                $display("Cycle: %d, Instructions: %d, CPI: %.3f", 
+                         cycle_count, inst_count, 
+                         cycle_count / (inst_count * 1.0));
+            end
             
             // end_program forever loop
             if (PC_Out == 32'h00000024) begin
-                $display("Finished in %d cycles", cycleCount);
+                $display("Total Cycles:       %d", cycle_count);
+                $display("Total Instructions: %d", inst_count);
+                $display("CPI:                %.3f", cycle_count / (inst_count * 1.0));
                 $finish;
             end
 

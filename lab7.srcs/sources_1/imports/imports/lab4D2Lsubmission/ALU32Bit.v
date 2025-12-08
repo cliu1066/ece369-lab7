@@ -34,7 +34,11 @@ module ALU32Bit(ALUControl, A, B, ALUResult, Zero);
 
 	output reg [31:0] ALUResult;	// answer - added reg here
 	output Zero;	    // Zero=1 if ALUResult == 0
-	reg [64:0] temp;
+	
+	wire [31:0] MultResult;
+	
+	(* use_dsp = "yes" *)
+	assign MultResult = A * B;
 
     /* Please fill in the implementation here... */
     always @(*) begin
@@ -49,14 +53,11 @@ module ALU32Bit(ALUControl, A, B, ALUResult, Zero);
             4'b0110: ALUResult = A ^ B;                    // XOR
             4'b0111: ALUResult = B << A[4:0];              // SLL (shift left logical)
             4'b1000: ALUResult = B >> A[4:0];              // SRL (shift right logical)
-            4'b1001: begin
-                temp = A * B;                              // MUL
-                ALUResult = temp[31:0];
-            end
-            default: ALUResult = A;                    // Default
+            4'b1001: ALUResult = MultResult;               // MUL
+            default: ALUResult = 32'd0;                    // Default
         endcase
     end
 
-    assign Zero = (ALUResult == 32'd0) ? 1'b1 : 1'b0;
+    assign Zero = (ALUResult == 32'd0);
             
 endmodule
