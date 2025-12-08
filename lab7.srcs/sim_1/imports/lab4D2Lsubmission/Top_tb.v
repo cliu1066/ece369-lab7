@@ -15,6 +15,9 @@ module Top_tb();
     reg Clk, Rst;
     wire [31:0] PC_Out, RegWriteData;
     wire [31:0] bestRow, bestCol;
+    
+    // cycle count
+    integer cycleCount;
 
     Top u0(
         .Clk(Clk), 
@@ -32,8 +35,22 @@ module Top_tb();
     
     initial begin
         Rst <= 1'b1;
+        cycleCount = 0;
         #20;
         Rst <= 1'b0;
+    end
+    
+    always @(posedge Clk) begin
+        if (!Rst) begin
+            cycleCount = cycleCount + 1;
+            
+            // end_program forever loop
+            if (PC_Out == 32'h00000024) begin
+                $display("Finished in %d cycles", cycleCount);
+                $finish;
+            end
+
+        end
     end
     
 endmodule

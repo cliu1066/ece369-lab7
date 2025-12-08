@@ -64,6 +64,7 @@ module RegisterFile(ReadRegister1, ReadRegister2, WriteRegister, WriteData, RegW
         for (i = 0; i < 32; i = i + 1) begin
             Register[i] = 32'd0;
         end
+        Register[29] = 32'd8000;
     end
 	
 	// Write procedure

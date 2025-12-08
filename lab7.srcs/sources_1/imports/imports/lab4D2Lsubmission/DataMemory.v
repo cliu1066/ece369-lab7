@@ -47,11 +47,11 @@ module DataMemory(Address, WriteData, Clk, MemWrite, MemRead, ReadData, MemSize)
     output reg[31:0] ReadData; // Contents of memory location at Address
 
     // memory array
-    reg [31:0] memory [0:4095];
+    reg [31:0] memory [0:8191];
 
     // Read data
     // Word index (use bits [11:2] for byte addressing)
-    wire [11:0] word_index = Address[13:2];
+    wire [31:0] word_index = Address[31:2];
     
     initial begin
         $readmemh("data_memory.mem", memory);

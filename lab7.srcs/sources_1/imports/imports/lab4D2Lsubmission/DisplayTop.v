@@ -16,18 +16,18 @@ module DisplayTop(Clk, Rst, out7, en_out);
     output [6:0] out7;
     output [7:0] en_out;
     
-    wire ClkOut;
+    //wire ClkOut;
     wire [31:0] bestRow;     // row
     wire [31:0] bestCol;     // col
     
-    ClkDiv u0(
+    /*ClkDiv u0(
         .Clk(Clk),
         .Rst(1'b0),
         .ClkOut(ClkOut)
-    );
+    );*/
     
     Top u1(
-        .Clk(ClkOut),
+        .Clk(Clk),
         .Rst(Rst),
         .PC_Out(PC_Out),
         .RegWriteData(RegWriteData),
