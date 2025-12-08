@@ -106,10 +106,9 @@ module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
     assign Jump_ID = Jump | JumpRegister;
 
     // ID/EX
-    wire ID_EX_RegDst, ID_EX_Link, ID_EX_Branch, ID_EX_MemRead, ID_EX_MemToReg, ID_EX_MemWrite, ID_EX_ALUSrc, ID_EX_RegWrite;
+    wire ID_EX_RegDst, ID_EX_Link, ID_EX_MemRead, ID_EX_MemToReg, ID_EX_MemWrite, ID_EX_ALUSrc, ID_EX_RegWrite;
     wire [3:0] ID_EX_ALUOp;
     wire [1:0] ID_EX_MemSize;
-    wire [31:0] ID_EX_Jump_Addr;
     wire [31:0] ID_EX_PC_AddResult;
     wire [31:0] ID_EX_ReadData1, ID_EX_ReadData2;
     wire [31:0] ID_EX_Imm_SE;
@@ -122,14 +121,12 @@ module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
         .Rst(Rst),
         .RegWrite_In(RegWrite), 
         .MemToReg_In(MemToReg),
-        .Branch_In(Branch), 
         .MemRead_In(MemRead), .MemWrite_In(MemWrite), 
-        .Jump_In(Jump), .JumpRegister_In(JumpRegister), 
         .Link_In(Link),
         .RegDst_In(RegDst), .ALUSrc_In(ALUSrc),
         .ALUOp_In(ALUOp), .MemSize_In(MemSize),
         
-        .Jump_Addr_In(JumpAddress), .PC_In(IF_ID_PC_Out),
+        .PC_In(IF_ID_PC_Out),
         .ReadData1(ReadData1), .ReadData2(ReadData2), .ImmSE_In(Imm_SE),
         .IF_ID_Rs_In(IF_ID_Instruction_Out[25:21]), 
         .IF_ID_Rt_In(IF_ID_Instruction_Out[20:16]), 
@@ -141,16 +138,12 @@ module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
                      
         .RegWrite_Out(ID_EX_RegWrite),
         .MemToReg_Out(ID_EX_MemToReg),
-        .Branch_Out(ID_EX_Branch),
         .MemRead_Out(ID_EX_MemRead),
         .MemWrite_Out(ID_EX_MemWrite),
-        .Jump_Out(ID_EX_Jump), 
-        .JumpRegister_Out(ID_EX_JumpRegister),
         .Link_Out(ID_EX_Link),
         .RegDst_Out(ID_EX_RegDst),
         .ALUSrc_Out(ID_EX_ALUSrc),
         .ALUOp_Out(ID_EX_ALUOp), .MemSize_Out(ID_EX_MemSize),
-        .Jump_Addr_Out(ID_EX_Jump_Addr),
         .PC_Out(ID_EX_PC_AddResult),
         .ReadData1_Out(ID_EX_ReadData1),
         .ReadData2_Out(ID_EX_ReadData2), 
@@ -237,15 +230,12 @@ module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
     ALU32Bit m14(ID_EX_ALUOp, EX_ALU_A, EX_ALUSrc_Out, EX_ALU_Result, EX_ALU_Zero);
 
     // EX/MEM
-    wire [31:0] EX_MEM_BranchAddr;
-    wire EX_MEM_Jump, EX_MEM_JumpRegister, EX_MEM_Branch;
     wire EX_MEM_Link, EX_MEM_MemRead, EX_MEM_MemToReg, EX_MEM_MemWrite, EX_MEM_RegWrite;
-    wire EX_MEM_ALUZero;
     wire [1:0] EX_MEM_MemSize;
-    wire [31:0] EX_MEM_Jump_Addr, EX_MEM_PC_AddResult;
+    wire [31:0] EX_MEM_PC_AddResult;
     wire [31:0] EX_MEM_ALU_Result;
     wire [31:0] EX_MEM_ReadData2;
-    wire [31:0] EX_MEM_BranchTarget;
+    wire [31:0] EX_MEM_BranchAddr;
     wire [4:0] EX_MEM_Rd;
     
     wire [4:0] EX_Rd;
@@ -256,37 +246,24 @@ module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
         .Rst(Rst),
         .RegWrite_In(ID_EX_RegWrite),
         .MemToReg_In(ID_EX_MemToReg),
-        .Branch_In(ID_EX_Branch),
         .MemRead_In(ID_EX_MemRead),
         .MemWrite_In(ID_EX_MemWrite),
-        .Jump_In(ID_EX_Jump),
-        .JumpRegister_In(ID_EX_JumpRegister),
         .Link_In(ID_EX_Link),
-        .RegDst_In(ID_EX_RegDst),
         .MemSize_In(ID_EX_MemSize),
-        .JumpAddr_In(ID_EX_Jump_Addr),
-        .BranchAddr_In(ID_EX_PC_AddResult),
-        .ALUZero_In(EX_ALU_Zero),
         .ALUResult_In(EX_ALU_Result),
         .ReadData2_In(StoreData_EX),
-        .BranchTarget_In(32'b0),
+        .BranchAddr_In(ID_EX_PC_AddResult),
         .WriteReg_In(EX_Rd),
         
         .RegWrite_Out(EX_MEM_RegWrite),
         .MemToReg_Out(EX_MEM_MemToReg),
-        .Branch_Out(EX_MEM_Branch),
         .MemRead_Out(EX_MEM_MemRead),
         .MemWrite_Out(EX_MEM_MemWrite),
-        .Jump_Out(EX_MEM_Jump),
-        .JumpRegister_Out(EX_MEM_JumpRegister),
         .Link_Out(EX_MEM_Link),
         .MemSize_Out(EX_MEM_MemSize),
-        .JumpAddr_Out(EX_MEM_Jump_Addr),
-        .BranchAddr_Out(EX_MEM_BranchAddr),
-        .ALUZero_Out(EX_MEM_ALUZero),
         .ALUResult_Out(EX_MEM_ALU_Result),
         .ReadData2_Out(EX_MEM_ReadData2),
-        .BranchTarget_Out(EX_MEM_BranchTarget),
+        .BranchAddr_Out(EX_MEM_BranchAddr),
         .EX_MEM_Rd_Out(EX_MEM_Rd)
     );
 
