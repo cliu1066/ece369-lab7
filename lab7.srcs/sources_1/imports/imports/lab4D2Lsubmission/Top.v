@@ -11,11 +11,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
+module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol, sadVal);
     input Clk, Rst;
     output wire [31:0] PC_Out;
     output wire [31:0] RegWriteData;
-    output wire [31:0] bestRow, bestCol;
+    output wire [31:0] bestRow, bestCol, sadVal;
     
     wire [31:0] PC_In, PC_AddResult;
     wire [31:0] Instruction;
@@ -59,7 +59,8 @@ module Top(Clk, Rst, PC_Out, RegWriteData, bestRow, bestCol);
         .ReadData1(ReadData1),
         .ReadData2(ReadData2),
         .bestRow(bestRow),
-        .bestCol(bestCol)
+        .bestCol(bestCol),
+        .sadVal(sadVal)
     );
     
     // Sign Extend

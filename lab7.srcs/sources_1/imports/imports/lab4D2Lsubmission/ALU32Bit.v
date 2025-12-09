@@ -36,8 +36,6 @@ module ALU32Bit(ALUControl, A, B, ALUResult, Zero);
 	output Zero;	    // Zero=1 if ALUResult == 0
 	
 	wire [31:0] MultResult;
-	
-	(* use_dsp = "yes" *)
 	assign MultResult = A * B;
 
     /* Please fill in the implementation here... */

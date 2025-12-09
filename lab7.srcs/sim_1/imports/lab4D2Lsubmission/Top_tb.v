@@ -14,7 +14,7 @@
 module Top_tb();
     reg Clk, Rst;
     wire [31:0] PC_Out, RegWriteData;
-    wire [31:0] bestRow, bestCol;
+    wire [31:0] bestRow, bestCol, sadVal;
     
     // cycle count
     reg [31:0] cycle_count;
@@ -26,7 +26,8 @@ module Top_tb();
         .PC_Out(PC_Out), 
         .RegWriteData(RegWriteData),
         .bestRow(bestRow),
-        .bestCol(bestCol)
+        .bestCol(bestCol),
+        .sadVal(sadVal)
     );
     
     initial begin
@@ -61,7 +62,6 @@ module Top_tb();
                 $display("Total Cycles:       %d", cycle_count);
                 $display("Total Instructions: %d", inst_count);
                 $display("CPI:                %.3f", cycle_count / (inst_count * 1.0));
-                $finish;
             end
 
         end
